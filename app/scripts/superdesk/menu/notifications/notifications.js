@@ -95,13 +95,13 @@
         .service('userNotifications', UserNotificationsService)
         .directive('sdMarkAsRead', MarkAsReadDirective)
 
-        .directive('sdNotifications', function() {
+        .directive('sdNotifications', ['template', function(template) {
             return {
                 require: '^sdSuperdeskView',
-                templateUrl: 'scripts/superdesk/menu/notifications/views/notifications.html',
+                templateUrl: template('scripts/superdesk/menu/notifications/views/notifications.html'),
                 link: function(scope, elem, attrs, ctrl) {
                     scope.flags = ctrl.flags;
                 }
             };
-        });
+        }]);
 })();

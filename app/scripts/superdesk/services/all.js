@@ -8,7 +8,8 @@ define([
     './entity',
     './server',
     './dragDropService',
-    './modalService'
+    './modalService',
+    './static'
 ], function(require) {
     'use strict';
 
@@ -21,6 +22,7 @@ define([
         require('./keyboardManager').name,
         require('./permissionsService').name,
         require('./storage').name,
-        require('./translate').name
+        require('./translate').name,
+        require('./static').name
     ];
 });

@@ -1,12 +1,12 @@
 (function() {
     'use strict';
 
-    angular.module('superdesk.menu', ['superdesk.menu.notifications'])
+    angular.module('superdesk.menu', ['superdesk.menu.notifications', 'superdesk.static'])
 
         // set flags for other directives
-        .directive('sdSuperdeskView', function() {
+        .directive('sdSuperdeskView', ['template', function(template) {
             return {
-                templateUrl: 'scripts/superdesk/menu/views/superdesk-view.html',
+                templateUrl: template('scripts/superdesk/menu/views/superdesk-view.html'),
                 controller: function() {
                     this.flags = {
                         menu: false,
@@ -17,13 +17,13 @@
                     scope.flags = ctrl.flags;
                 }
             };
-        })
+        }])
 
-        .directive('sdMenuWrapper', ['$route', 'superdesk', 'betaService', 'userNotifications',
-        function($route, superdesk, betaService, userNotifications) {
+        .directive('sdMenuWrapper', ['$route', 'superdesk', 'betaService', 'userNotifications', 'template',
+        function($route, superdesk, betaService, userNotifications, template) {
             return {
                 require: '^sdSuperdeskView',
-                templateUrl: 'scripts/superdesk/menu/views/menu.html',
+                templateUrl: template('scripts/superdesk/menu/views/menu.html'),
                 link: function(scope, elem, attrs, ctrl) {
 
                     scope.currentRoute = null;

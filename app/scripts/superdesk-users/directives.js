@@ -6,7 +6,7 @@ define([
 ], function(_, $, angular, require) {
     'use strict';
 
-    angular.module('superdesk.users.directives', [])
+    angular.module('superdesk.users.directives', ['superdesk.static'])
         .config(['$compileProvider', function($compileProvider) {
             // configure new 'compile' directive by passing a directive
             // factory function. The factory function injects the '$compile'
@@ -68,11 +68,11 @@ define([
                 }
             };
         }])
-        .directive('sdUserActivity', ['profileService', function(profileService) {
+        .directive('sdUserActivity', ['profileService', 'template', function(profileService, template) {
             return {
                 restrict: 'A',
                 replace: true,
-                templateUrl: 'scripts/superdesk-users/views/activity-feed.html',
+                templateUrl: template('scripts/superdesk-users/views/activity-feed.html'),
                 scope: {
                     user: '='
                 },
@@ -112,15 +112,15 @@ define([
                 }
             };
         }])
-        .directive('sdUserEdit', ['gettext', 'notify', 'api', 'session', '$location', '$route', 'superdesk',
-        function(gettext, notify, api, session, $location, $route, superdesk) {
+        .directive('sdUserEdit', ['gettext', 'notify', 'api', 'session', '$location', '$route', 'superdesk', 'template',
+        function(gettext, notify, api, session, $location, $route, superdesk, template) {
 
             var USERNAME_REGEXP = /^[A-Za-z0-9_.'-]+$/;
             var PHONE_REGEXP = /^(?:(?:0?[1-9][0-9]{8})|(?:(?:\+|00)[1-9][0-9]{9,11}))$/;
 
             return {
                 replace: true,
-                templateUrl: require.toUrl('./views/edit-form.html'),
+                templateUrl: template('scripts/superdesk-users/views/edit-form.html'),
                 scope: {
                     origUser: '=user',
                     onsave: '&',
@@ -205,9 +205,9 @@ define([
                 }
             };
         }])
-        .directive('sdUserPreferences', ['api', 'session', function(api, session) {
+        .directive('sdUserPreferences', ['api', 'session', 'template', function(api, session, template) {
             return {
-                templateUrl: 'scripts/superdesk-users/views/user-preferences.html',
+                templateUrl: template('scripts/superdesk-users/views/user-preferences.html'),
                 link: function(scope, elem, attrs) {
 
                     var orig;
@@ -331,9 +331,9 @@ define([
                 }
             };
         }])
-        .directive('sdUserList', ['keyboardManager', function(keyboardManager) {
+        .directive('sdUserList', ['keyboardManager', 'template', function(keyboardManager, template) {
             return {
-                templateUrl: 'scripts/superdesk-users/views/user-list-item.html',
+                templateUrl: template('scripts/superdesk-users/views/user-list-item.html'),
                 scope: {
                     users: '=',
                     selected: '=',
@@ -367,25 +367,25 @@ define([
                 }
             };
         }])
-        .directive('sdUserListItem', function() {
+        .directive('sdUserListItem', ['template', function(template) {
             return {
-                templateUrl: 'scripts/superdesk-users/views/user-list-item.html',
+                templateUrl: template('scripts/superdesk-users/views/user-list-item.html'),
                 scope: {
                     user: '=',
                     list: '=',
                     index: '='
                 }
             };
-        })
+        }])
 
-        .directive('sdActivity', function() {
+        .directive('sdActivity', ['template', function(template) {
             return {
-                templateUrl: 'scripts/superdesk-users/views/activity-list.html'
+                templateUrl: template('scripts/superdesk-users/views/activity-list.html')
             };
-        })
-        .directive('sdUserMentio', ['mentioUtil', 'api', 'userList', function(mentioUtil, api, userList) {
+        }])
+        .directive('sdUserMentio', ['mentioUtil', 'api', 'userList', 'template',  function(mentioUtil, api, userList, template) {
             return {
-                templateUrl: 'scripts/superdesk-users/views/mentions.html',
+                templateUrl: template('scripts/superdesk-users/views/mentions.html'),
                 link: function(scope, elem) {
                     scope.users = [];
 

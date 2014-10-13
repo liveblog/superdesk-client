@@ -3,7 +3,7 @@ define([
 ], function(angular) {
     'use strict';
 
-    return angular.module('superdesk.directives.sort', [])
+    return angular.module('superdesk.directives.sort', ['superdesk.static'])
         /**
          * sdSort inserts sort links based on current sort field and direction.
          *
@@ -18,13 +18,13 @@ define([
          * @scope {string} label - user friendly text for sort field
          * @scope {string} field - field name for sort field
          */
-        .directive('sdSort', ['$location', function($location) {
+        .directive('sdSort', ['$location', 'template', function($location, template) {
             return {
                 scope: {
                     label: '@',
                     field: '@'
                 },
-                templateUrl: 'scripts/superdesk/views/sdSort.html',
+                templateUrl: template('scripts/superdesk/views/sdSort.html'),
                 link: function(scope, element, attrs) {
 
                     scope.loc = $location;
