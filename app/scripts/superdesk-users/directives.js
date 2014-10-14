@@ -60,9 +60,9 @@ define([
                         scope.treeTemplate = template('scripts/superdesk-users/views/rolesLeaf.html');
                     }
 
-                    var template = '<div class="role-holder" ng-include="treeTemplate"></div>';
+                    var templateString = '<div class="role-holder" ng-include="treeTemplate"></div>';
 
-                    var newElement = angular.element(template);
+                    var newElement = angular.element(templateString);
                     $compile(newElement)(scope);
                     element.replaceWith(newElement);
                 }
