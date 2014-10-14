@@ -1,6 +1,7 @@
 define([
     'angular',
-    'superdesk-users/directives'
+    'superdesk-users/directives',
+    'superdesk/services/static'
 ], function(angular) {
     'use strict';
 
