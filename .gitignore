@@ -9,9 +9,9 @@ dist/scripts/**
 !dist/scripts/superdesk.js
 !dist/scripts/vendor.js
 dist/styles/css/**
-!dist/styles/css/jquery.jcrop.css
+!dist/styles/css/app.css
 !dist/styles/css/bootstrap.css
-app.css
+!dist/styles/css/jquery.jcrop.css
 *.swp
 .tmp
 .sass-cache
