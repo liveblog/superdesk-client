@@ -46,7 +46,7 @@ define([
                 }
             };
         })
-        .directive('sdRolesTreeview', ['$compile', function($compile) {
+        .directive('sdRolesTreeview', 'template', ['$compile', function($compile, template) {
             return {
                 restrict: 'A',
                 terminal: true,
@@ -55,9 +55,9 @@ define([
 
                     if (scope.role['extends'] !== undefined) {
                         scope.childrole = scope.roles[_.findKey(scope.roles, {_id: scope.role['extends']})];
-                        scope.treeTemplate = 'scripts/superdesk-users/views/rolesTree.html';
+                        scope.treeTemplate = template('scripts/superdesk-users/views/rolesTree.html');
                     } else {
-                        scope.treeTemplate = 'scripts/superdesk-users/views/rolesLeaf.html';
+                        scope.treeTemplate = template('scripts/superdesk-users/views/rolesLeaf.html');
                     }
 
                     var template = '<div class="role-holder" ng-include="treeTemplate"></div>';
