@@ -4,10 +4,10 @@ define([
 ], function(_, require) {
     'use strict';
 
-    return ['activityChooser', 'keyboardManager', function(activityChooser, keyboardManager) {
+    return ['activityChooser', 'keyboardManager', 'template', function(activityChooser, keyboardManager, template) {
         return {
             scope: {},
-            templateUrl: require.toUrl('./views/activity-chooser.html'),
+            templateUrl: template('scripts/superdesk/activity/views/activity-chooser.html'),
             link: function(scope, elem, attrs) {
                 var UP = -1,
                     DOWN = 1;
