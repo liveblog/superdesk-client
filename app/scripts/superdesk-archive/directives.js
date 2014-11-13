@@ -163,8 +163,7 @@ define([
                 templateUrl: require.toUrl('./views/media-view.html'),
                 scope: {
                     items: '=',
-                    item: '=',
-                    close: '&'
+                    item: '='
                 },
                 link: function(scope, elem) {
 
@@ -225,50 +224,6 @@ define([
                 }
             };
         }])
-        .directive('sdMediaMetadata', ['userList', function(userList) {
-            return {
-                scope: {
-                    item: '='
-                },
-                templateUrl: 'scripts/superdesk-archive/views/metadata-view.html',
-                link: function(scope, elem) {
-
-                    scope.$watch('item', reloadData);
-
-                    function reloadData() {
-                        scope.original_creator = null;
-                        scope.version_creator = null;
-
-                        if (scope.item.original_creator) {
-                            userList.getUser(scope.item.original_creator).then(function(user) {
-                                scope.original_creator = user.display_name;
-                            });
-                        }
-                        if (scope.item.version_creator) {
-                            userList.getUser(scope.item.version_creator).then(function(user) {
-                                scope.version_creator = user.display_name;
-                            });
-                        }
-                    }
-                }
-            };
-        }])
-        .directive('sdMetaIngest', ['ingestSources', function(ingestSources) {
-            var promise = ingestSources.initialize();
-            return {
-                scope: {
-                    provider: '='
-                },
-                template: '{{name}}',
-                link: function(scope) {
-                    promise.then(function() {
-                        if (scope.provider) {
-                            scope.name = ingestSources.providersLookup[scope.provider].name;
-                        }
-                    });
-                }
-            };
-        }])
         .directive('sdSingleItem', [ function() {
 
             return {
@@ -277,6 +232,9 @@ define([
                 scope: {
                     item: '=',
                     contents: '='
+                },
+                link: function(scope, elem) {
+
                 }
             };
         }])

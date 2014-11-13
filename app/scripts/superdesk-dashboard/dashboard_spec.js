@@ -1,45 +1,92 @@
-'use strict';
-
-describe('dashboard', function() {
+define(['./module', 'angular'], function(DashboardModule, angular) {
+    'use strict';
 
     var USER_URL = '/users/1';
-    var USER = {
-        _links: {self: {href: USER_URL}},
-        _etag: '1'
-    };
 
-    beforeEach(module('templates'));
-    beforeEach(module('superdesk.dashboard'));
+    describe('dashboard', function() {
 
-    beforeEach(inject(function(session) {
-        session.start({}, USER);
-    }));
+        beforeEach(module(function($provide) {
 
-    it('can load user widgets', inject(function(workspace, api, $rootScope, $q) {
-        spyOn(api, 'get').and.returnValue($q.when(USER));
+            $provide.service('session', function() {
+                this.identity = {
+                    _links: {self: {href: USER_URL}}
+                };
+            });
 
-        var widgets;
-        workspace.load().then(function(_widgets) {
-            widgets = _widgets.widgets;
-        });
+            $provide.provider('superdesk', function() {
+                var _activity = {};
+                this.activity = function(id, activity) {
+                    _activity[id] = activity;
+                };
 
-        $rootScope.$digest();
-        expect(api.get).toHaveBeenCalledWith(USER_URL);
-        expect(widgets.length).toBe(0);
-    }));
+                this.$get = function() {
+                    return {activity: _activity};
+                };
+            });
 
-    it('can add widget to user workspace', inject(function(workspace, api, $rootScope, $q) {
+            $provide.provider('api', function() {
+                this.api = function() {};
+                this.$get = function($q) {
+                    return {
+                        users: {
+                            widgets: {},
+                            getByUrl: function(url) {
+                                return $q.when(this.widgets);
+                            },
+                            save: function(dest, diff) {
+                                return;
+                            }
+                        }
+                    };
+                };
+            });
+        }));
 
-        var user = angular.extend(USER, {_etag: '2'});
+        beforeEach(module('superdesk.dashboard'));
 
-        spyOn(api, 'get').and.returnValue($q.when(user));
-        spyOn(api, 'save').and.returnValue($q.when(USER));
+        function getWidget() {
+            var widget;
+            inject(function(widgets) {
+                widget = {_id: widgets[0]._id, row: 1, col: 1, sizex: 1, sizey: 1, configuration: widgets[0].configuration};
+            });
+            return widget;
+        }
 
-        workspace.load();
-        $rootScope.$digest();
-        workspace.save();
-        $rootScope.$digest();
+        function getScope(widgets) {
+            var scope;
+            inject(function(superdesk, api, $controller, $rootScope) {
+                scope = $rootScope.$new(true);
+                api.users.widgets = widgets ? {workspace: {widgets: widgets}} : {};
+                $controller(superdesk.activity['/workspace'].controller, {$scope: scope});
+                $rootScope.$apply();
+            });
 
-        expect(api.save).toHaveBeenCalledWith('users', user, {workspace: {widgets: []}});
-    }));
+            return scope;
+        }
+
+        it('can render load user widgets', inject(function() {
+            var scope = getScope();
+            expect(scope.userWidgets.length).toBe(0);
+            expect(scope.availableWidgets.length).toBe(1);
+        }));
+
+        it('can add widget to user workspace', inject(function(api, $q, $rootScope) {
+            var scope = getScope();
+
+            spyOn(api.users, 'save').and.returnValue($q.when());
+
+            scope.addWidget(scope.availableWidgets[0]);
+            $rootScope.$apply();
+
+            expect(scope.userWidgets.length).toBe(1);
+            expect(scope.availableWidgets.length).toBe(1);
+            expect(api.users.save).toHaveBeenCalled();
+        }));
+
+        it('can load stored widgets', inject(function() {
+            var scope = getScope([getWidget()]);
+            expect(scope.userWidgets.length).toBe(1);
+            expect(scope.userWidgets[0].label).toBe(scope.availableWidgets[0].label);
+        }));
+    });
 });

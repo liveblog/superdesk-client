@@ -1,8 +1,8 @@
 define(['lodash'], function(_) {
     'use strict';
 
-    BaseListController.$inject = ['$scope', '$location', 'superdesk', 'api', 'contentQuery', 'desks', 'preferencesService', 'notify'];
-    function BaseListController($scope, $location, superdesk, api, contentQuery, desks, preferencesService, notify) {
+    BaseListController.$inject = ['$scope', '$location', 'superdesk', 'api', 'es', 'desks', 'preferencesService', 'notify'];
+    function BaseListController($scope, $location, superdesk, api, es, desks, preferencesService, notify) {
         var self = this;
 
         var lastQueryParams = {};
@@ -43,12 +43,8 @@ define(['lodash'], function(_) {
             $location.search('_id', item ? item._id : null);
         };
 
-        $scope.openLightbox = function openLightbox() {
+        $scope.display = function display() {
             $scope.selected.view = $scope.selected.preview;
-        };
-
-        $scope.closeLightbox = function closeLightbox() {
-            $scope.selected.view = null;
         };
 
         $scope.$on('$routeUpdate', function(e, data) {
@@ -57,15 +53,14 @@ define(['lodash'], function(_) {
             }
         });
 
-        this.buildQuery = function(params, filterDesk) {
-
-            var query = contentQuery.query(params.q || null);
+        this.buildFilters = function(params, filterDesk) {
+            var filters = [];
 
             if (filterDesk) {
                 if (desks.getCurrentStageId()) {
-                    query.filter({term: {'task.stage': desks.getCurrentStageId()}});
+                    filters.push({term: {'task.stage': desks.getCurrentStageId()}});
                 } else if (desks.getCurrentDeskId()) {
-                    query.filter({term: {'task.desk': desks.getCurrentDeskId()}});
+                    filters.push({term: {'task.desk': desks.getCurrentDeskId()}});
                 }
             }
 
@@ -79,18 +74,21 @@ define(['lodash'], function(_) {
                     range.versioncreated.gte = params.after;
                 }
 
-                query.filter({range: range});
+                filters.push({range: range});
             }
 
             if (params.provider) {
-                query.filter({term: {provider: params.provider}});
+                var provider = {
+                    provider: params.provider
+                };
+                filters.push({term: provider});
             }
 
             if (params.type) {
                 var type = {
                     type: JSON.parse(params.type)
                 };
-                query.filter({terms: type});
+                filters.push({terms: type});
             }
 
             if (params.urgency_min || params.urgency_max) {
@@ -102,17 +100,25 @@ define(['lodash'], function(_) {
                         lte: params.urgency_max
                     }
                 };
-                query.filter({range: urgency});
+                filters.push({range: urgency});
             }
 
-            return query.getCriteria();
+            if ($location.search().spike) {
+                filters.push({term: {is_spiked: true}});
+            } else {
+                filters.push({not: {term: {is_spiked: true}}});
+            }
+
+            return filters;
         };
 
         this.getQuery = function getQuery(params, filterDesk) {
             if (!_.isEqual(_.omit(params, 'page'), _.omit(lastQueryParams, 'page'))) {
                 $location.search('page', null);
             }
-            var query = this.buildQuery(params, filterDesk);
+            var filters = this.buildFilters(params, filterDesk);
+            var query = es(params, filters);
+            query.sort = [{versioncreated: 'desc'}];
             lastQueryParams = params;
             return query;
         };

@@ -43,9 +43,7 @@ define([
                 }
             });
         }])
-        .factory('desks', ['$q', 'api', 'preferencesService', 'userList', 'notify',
-            function($q, api, preferencesService, userList, notify) {
-
+        .factory('desks', ['$q', 'api', 'storage', 'userList', function($q, api, storage, userList) {
             var desksService = {
                 desks: null,
                 users: null,
@@ -55,8 +53,6 @@ define([
                 deskMembers: {},
                 deskStages: {},
                 loading: null,
-                activeDeskId: null,
-                activeStageId: null,
                 fetchDesks: function() {
                     var self = this;
 
@@ -112,43 +108,17 @@ define([
                 fetchUserDesks: function(user) {
                     return api.users.getByUrl(user._links.self.href + '/desks');
                 },
-                fetchCurrentDeskId: function() {
-                    var self = this;
-                    return preferencesService.get('desk:items').then(function(result) {
-                        if (result && result.length > 0) {
-                            self.activeDeskId = result[0];
-                        }
-                    });
-                },
-                fetchCurrentStageId: function() {
-                    var self = this;
-                    return preferencesService.get('stage:items').then(function(result) {
-                        if (result && result.length > 0) {
-                            self.activeStageId = result[0];
-                        }
-                    });
-                },
                 getCurrentDeskId: function() {
-                    return this.activeDeskId;
+                    return storage.getItem('desks:currentDeskId') || null;
                 },
                 setCurrentDeskId: function(deskId) {
-                    this.activeDeskId = deskId;
-                    preferencesService.update({'desk:items': [deskId]}, 'desk:items').then(function() {
-                            //nothing to do
-                        }, function(response) {
-                            notify.error(gettext('Session preference could not be saved...'));
-                    });
+                    storage.setItem('desks:currentDeskId', deskId);
                 },
                 getCurrentStageId: function() {
-                    return this.activeStageId;
+                    return storage.getItem('desks:currentStageId') || null;
                 },
                 setCurrentStageId: function(stageId) {
-                    this.activeStageId = stageId;
-                    preferencesService.update({'stage:items': [stageId]}, 'stage:items').then(function() {
-                        //nothing to do
-                        }, function(response) {
-                            notify.error(gettext('Session preference could not be saved...'));
-                    });
+                    storage.setItem('desks:currentStageId', stageId);
                 },
                 fetchCurrentDesk: function() {
                     return api.desks.getById(this.getCurrentDeskId());
@@ -160,11 +130,7 @@ define([
                     return this.deskLookup[this.getCurrentDeskId()];
                 },
                 initialize: function() {
-
                     if (!this.loading) {
-                        this.fetchCurrentDeskId();
-                        this.fetchCurrentStageId();
-
                         this.loading = this.fetchDesks()
                             .then(angular.bind(this, this.fetchUsers))
                             .then(angular.bind(this, this.generateDeskMembers))

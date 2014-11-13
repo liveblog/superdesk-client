@@ -284,24 +284,15 @@
         'gettext',
         'desks',
         'item',
-        'authoring',
-        'api'
+        'authoring'
     ];
 
-    function AuthoringController($scope, superdesk, workqueue, notify, gettext, desks, item, authoring, api) {
+    function AuthoringController($scope, superdesk, workqueue, notify, gettext, desks, item, authoring) {
         var stopWatch = angular.noop;
 
         $scope.workqueue = workqueue.all();
         $scope.dirty = false;
         $scope.viewSendTo = false;
-        $scope.stage = null;
-
-        if (item.task && item.task.stage) {
-            api('stages').getById(item.task.stage)
-            .then(function(result) {
-                $scope.stage = result;
-            });
-        }
 
         function startWatch() {
             function isDirty() {

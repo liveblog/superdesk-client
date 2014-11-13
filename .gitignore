@@ -15,7 +15,6 @@ screenshots/
 coverage/
 Thumbs.db
 test-results.xml
-.idea/
 .vagrant/
 .bower.json
-
+.idea/

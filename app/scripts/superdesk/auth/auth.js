@@ -22,24 +22,22 @@ define([
         };
 
         $scope.sendToken = function() {
-        	$scope.sendTokenError = null;
             api.resetPassword.create({email: $scope.email})
             .then(function(result) {
                 notify.success(gettext('Link sent. Please check your email inbox.'));
                 $scope.flowStep = 2;
-            }, function(rejection) {
-            	$scope.sendTokenError = rejection.status;
+            }, function(result) {
+                notify.error(gettext('There was a problem. Link is not sent.'));
             });
             resetForm();
         };
         $scope.resetPassword = function() {
-        	$scope.setPasswordError = null;
             api.resetPassword.create({token: $scope.token, password: $scope.password})
             .then(function(result) {
                 notify.success(gettext('Password is changed. You can login using your new password.'));
                 $location.path('/').search({});
-            }, function(rejection) {
-            	$scope.setPasswordError = rejection.status;
+            }, function(result) {
+                notify.error(gettext('Link is invalid. Password is not changed.'));
             });
             resetForm();
         };
