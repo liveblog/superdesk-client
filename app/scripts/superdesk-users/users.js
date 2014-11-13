@@ -58,6 +58,13 @@
         };
 
         /**
+         * Test if user is on pending state
+         */
+        this.isPending = function isPending(user) {
+            return user && user.needs_activation;
+        };
+
+        /**
          * Toggle user status
          */
         this.toggleStatus = function toggleStatus(user, active) {
@@ -374,11 +381,17 @@
                 }
                 $scope.cancel();
             }, function(response) {
-                if (response.status === 400 && response.data._issues.name.unique === 1)
+                if (response.status === 400 && typeof(response.data._issues.name) !== 'undefined' &&
+                response.data._issues.name.unique === 1)
                 {
                         notify.error(gettext('I\'m sorry but a role with that name already exists.'));
                 } else {
+                    if (typeof(response.data._issues['validator exception']) !== 'undefined')
+                    {
+                        notify.error(response.data._issues['validator exception']);
+                    } else {
                     notify.error(gettext('I\'m sorry but there was an error when saving the role.'));
+                }
                 }
             });
         };
@@ -712,7 +725,7 @@
                             scope.onsave({user: scope.origUser});
 
                             if (scope.user._id === session.identity._id) {
-                                session.updateIdentity(scope.user);
+                                session.updateIdentity(scope.origUser);
                             }
 
                         }, function(response) {
@@ -755,6 +768,7 @@
                         scope.confirm = {password: null};
                         scope.show = {password: false};
                         scope._active = users.isActive(user);
+                        scope._pending = users.isPending(user);
                         scope.profile = scope.user._id === session.identity._id;
                     }
                 }
@@ -926,6 +940,10 @@
 
                     scope.active = function(user) {
                         return users.isActive(user);
+                    };
+
+                    scope.pending = function(user) {
+                        return users.isPending(user);
                     };
 
                     scope.select = function(user) {
