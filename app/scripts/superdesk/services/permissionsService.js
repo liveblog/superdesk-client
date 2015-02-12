@@ -1,4 +1,4 @@
-define(['angular'], function(angular) {
+define(['angular', 'lodash'], function(angular, _) {
     'use strict';
 
     /**

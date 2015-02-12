@@ -1,4 +1,4 @@
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
     'use strict';
 
     angular.module('superdesk.menu', ['superdesk.menu.notifications', 'superdesk.asset'])
@@ -81,4 +81,4 @@
                 }
             };
         }]);
-})();
+});

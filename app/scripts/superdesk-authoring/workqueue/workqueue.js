@@ -7,7 +7,7 @@
  * AUTHORS and LICENSE files distributed with this source code, or
  * at https://www.sourcefabric.org/superdesk/license
  */
- (function() {
+require(['angular', 'lodash'], function(angular, _) {
 
 'use strict';
 
@@ -119,4 +119,4 @@ angular.module('superdesk.authoring.workqueue', ['superdesk.activity', 'superdes
                 filters: [{action: 'author', type: 'dashboard'}]
             });
     }]);
-})();
+});

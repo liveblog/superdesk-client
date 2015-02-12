@@ -1,5 +1,5 @@
 
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
 
 'use strict';
 
@@ -139,4 +139,4 @@ angular.module('superdesk.authoring.comments', ['superdesk.authoring.widgets', '
     .service('commentsService', CommentsService)
     .directive('sdCommentText', CommentTextDirective);
 
-})();
+});

@@ -1,4 +1,4 @@
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
     'use strict';
 
     var app = angular.module('superdesk.groups', [
@@ -254,4 +254,4 @@
         }
 
     return app;
-})();
+});

@@ -1,4 +1,4 @@
-define(['require'], function(require) {
+define(['require', 'lodash'], function(require, _) {
     'use strict';
 
     return ['$location', function($location) {

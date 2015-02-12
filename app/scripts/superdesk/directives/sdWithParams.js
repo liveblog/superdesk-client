@@ -1,6 +1,7 @@
 define([
-    'angular'
-], function(angular) {
+    'angular',
+    'lodash'
+], function(angular, _) {
     'use strict';
 
     return angular.module('superdesk.links', [])

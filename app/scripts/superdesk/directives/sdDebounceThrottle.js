@@ -1,7 +1,8 @@
 define([
     'jquery',
-    'angular'
-], function($, angular) {
+    'angular',
+    'lodash'
+], function($, angular, _) {
     'use strict';
 
     var wrapper = function(methodName) {

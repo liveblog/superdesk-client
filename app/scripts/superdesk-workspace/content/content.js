@@ -1,4 +1,4 @@
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
 'use strict';
 
 ContentCtrlFactory.$inject = ['api', 'superdesk'];
@@ -55,4 +55,4 @@ function ContentCtrlFactory(api, superdesk) {
 
 angular.module('superdesk.workspace.content', [])
     .factory('ContentCtrl', ContentCtrlFactory);
-})();
+});

@@ -1,4 +1,4 @@
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
     'use strict';
 
     var CONTENT_FIELDS_DEFAULTS = {
@@ -936,4 +936,4 @@
                     }
 	            });
         }]);
-})();
+});

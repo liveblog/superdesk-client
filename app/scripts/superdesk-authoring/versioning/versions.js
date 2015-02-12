@@ -1,4 +1,4 @@
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
 
 'use strict';
 
@@ -102,4 +102,4 @@ angular.module('superdesk.authoring.versions', [])
 
     .controller('VersioningWidgetCtrl', VersioningController);
 
-})();
+});

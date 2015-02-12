@@ -1,6 +1,7 @@
 define([
-    'angular'
-], function(angular) {
+    'angular',
+    'lodash'
+], function(angular, _) {
     'use strict';
 
     var coverageTypes = ['story', 'photo', 'video', 'graphics', 'live-blogging'];

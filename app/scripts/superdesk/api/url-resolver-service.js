@@ -1,4 +1,4 @@
-define([], function() {
+define(['lodash'], function(_) {
     'use strict';
 
     URLResolver.$inject = ['$http', '$q', 'config'];

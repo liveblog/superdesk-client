@@ -1,5 +1,5 @@
 
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
 
 'use strict';
 
@@ -208,4 +208,4 @@ angular.module('superdesk.authoring.metadata', ['superdesk.authoring.widgets'])
 	.directive('sdMetaTerms', MetadataListEditingDirective)
 	.directive('sdMetaDropdown', MetadataDropdownDirective)
 	.value('staticMetadata', staticMetadata);
-})();
+});

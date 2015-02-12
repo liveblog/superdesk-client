@@ -1,4 +1,4 @@
-(function() {
+require(['angular', 'lodash'], function(angular, _) {
     'use strict';
 
     SearchService.$inject = ['$location', 'gettext'];
@@ -937,4 +937,4 @@
         }])
 
         ;
-})();
+});

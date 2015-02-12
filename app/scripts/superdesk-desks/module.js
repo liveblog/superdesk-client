@@ -1,7 +1,8 @@
 define([
     'require',
+    'lodash',
     './directives'
-], function(require) {
+], function(require, _) {
     'use strict';
 
     DeskListController.$inject = ['$scope', 'api'];

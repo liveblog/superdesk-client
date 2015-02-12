@@ -4,6 +4,7 @@ define([
     './controllers/list',
     './controllers/upload',
     './archive-widget/archive',
+    './archive-widget/baseWidget',
     './directives'
 ], function(angular, require) {
     'use strict';
@@ -47,7 +48,8 @@ define([
         'superdesk.search',
         require('./directives').name,
         'superdesk.dashboard',
-        'superdesk.widgets.archive'
+        'superdesk.widgets.archive',
+        'superdesk.widgets.base'
     ])
 
         .service('spike', SpikeService)

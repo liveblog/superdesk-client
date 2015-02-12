@@ -1,7 +1,8 @@
 define([
     'angular',
-    './http-endpoint-factory'
-], function(angular, HttpEndpointFactory) {
+    './http-endpoint-factory',
+    'lodash'
+], function(angular, HttpEndpointFactory, _) {
     'use strict';
 
     /**

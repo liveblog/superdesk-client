@@ -1,13 +1,14 @@
 define([
     'angular',
     'require',
+    'lodash',
     './workspace-controller',
     './workspace-service',
     './sd-widget-directive',
     './widgets-provider',
     './grid/grid',
     './world-clock/world-clock'
-], function(angular, require) {
+], function(angular, require, _) {
     'use strict';
 
     DeskDropdownDirective.$inject = ['desks', '$route'];

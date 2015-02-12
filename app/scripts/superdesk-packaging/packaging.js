@@ -8,7 +8,7 @@
  * at https://www.sourcefabric.org/superdesk/license
  */
 
-(function() {
+require(['lodash', 'angular'], function(_, angular) {
 
     'use strict';
 
@@ -354,4 +354,4 @@
     .controller('SearchWidgetCtrl', SearchWidgetCtrl);
 
     return app;
-})();
+});

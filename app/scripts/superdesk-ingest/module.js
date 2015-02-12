@@ -3,8 +3,9 @@ define([
     'd3',
     'superdesk-archive/controllers/baseList',
     './ingest-widget/ingest',
-    './ingest-stats-widget/stats'
-], function(angular, d3, BaseListController) {
+    './ingest-stats-widget/stats',
+    'lodash'
+], function(angular, d3, BaseListController, _) {
     'use strict';
 
     var app = angular.module('superdesk.ingest', [

@@ -1,10 +1,11 @@
 define([
     'angular',
     'require',
+    'lodash',
     './list-view-directive',
     './searchbar-directive',
     './list-item-directive'
-], function(angular, require) {
+], function(angular, require, _) {
     'use strict';
 
     var mod = angular.module('superdesk.list', []);

@@ -2,8 +2,9 @@ define([
 	'angular',
 	'require',
 	'moment',
+	'lodash',
 	'./autoheight-directive'
-], function(angular, require, moment) {
+], function(angular, require, moment, _) {
 	'use strict';
 
 	/**

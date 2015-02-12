@@ -1,7 +1,8 @@
 define([
     'angular',
-    './baseList'
-], function(angular, BaseListController) {
+    './baseList',
+    'lodash'
+], function(angular, BaseListController, _) {
     'use strict';
 
     ArchiveListController.$inject = [
